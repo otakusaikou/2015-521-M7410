@@ -2,7 +2,7 @@ Adjustment and Analysis of Spatial Information Homework Assignments
 ==========
 
 ##Description
-Homework assignments for NTU's [521 M7410](https://goo.gl/MTHXrt) 2015.
+Homework assignments for NTU's [521 M7410](https://goo.gl/MTHXrt) 2015.  
 Written with Python and Matlab Code.
 
 ##Requirements
@@ -10,8 +10,8 @@ Written with Python and Matlab Code.
 ###Python
 This project require [Python v2.7.X](https://www.python.org) and the following modules to be installed.
 
--[Numpy](http://www.numpy.org)
--[Matplotlib](http://matplotlib.org)
+-[Numpy](http://www.numpy.org)  
+-[Matplotlib](http://matplotlib.org)  
 
 ###Matlab
 MATLAB R2010a or higher.
