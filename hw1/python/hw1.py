@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 from numpy import random, mean, std
 from mpl_toolkits.mplot3d import Axes3D, proj3d
