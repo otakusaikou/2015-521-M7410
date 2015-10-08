@@ -86,4 +86,3 @@ xlabel('Number of points',  'FontSize', 10);
 ylabel('Standard deviation Z',  'FontSize', 10);
 plot([300, 3000, 30000, 300000, 3000000], [ST(3), ST2(3), ST3(3), ST4(3), ST5(3)], '-r*');
 axis([0, 3000000, 0.08, 0.12]);
-
