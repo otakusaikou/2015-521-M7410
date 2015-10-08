@@ -40,5 +40,3 @@ disp(L);
 [row, col] = size(A);
 sigma0 = sqrt((V'* W * V) / row);
 fprintf('Error of unit weight : %.4f\n', sigma0);
-
-
