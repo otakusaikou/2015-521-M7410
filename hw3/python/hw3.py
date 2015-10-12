@@ -6,7 +6,9 @@ from sympy import symbols, diff
 from fractions import gcd
 
 
+# Get greatest common divisor of a list of number
 def getGCD(l):
+    # Check if any float contained in list. If it so, return 1.0
     if False in map(lambda x: x == int(x), l):
         return 1.0
 
@@ -14,23 +16,15 @@ def getGCD(l):
 
 
 def matrixApproach(B, P, f, l):
-    # Compute Normal matrix
-    N = B.T * P * B
-
-    # Compute W matrix
-    W = -B.T * P * f
-
-    # Compute the unknown parameters
-    X = N.I * W
-
-    # Compute residual vector
-    V = B * X + f
+    N = B.T * P * B                         # Compute Normal matrix
+    W = -B.T * P * f                        # Compute W matrix
+    X = N.I * W                             # Compute the unknown parameters
+    V = B * X + f                           # Compute residual vector
     print "Residual : "
     print "V = \t", str(V.round(4)).replace("\n", "\n\t")
     print
 
-    # Compute corrected observation
-    L = l + V
+    L = l + V               # Compute corrected observation
     print "Correct observation : "
     print "L = \t", str(L.round(4)).replace("\n", "\n\t")
     print
@@ -43,31 +37,34 @@ def matrixApproach(B, P, f, l):
 
 
 def longHandApproach(B, P, f, l):
-    # Define symbols
-    Ha, Hb, Hc = symbols('Ha Hb Hc')
+    Ha, Hb, Hc = symbols('Ha Hb Hc')        # Define symbols
     x = np.matrix([Ha, Hb, Hc]).T
+    V = B * x + f                           # List observation equations
+    phi = (V.T * P * V)[0, 0]               # Compute mean square error
 
-    # List observation equations
-    V = B * x + f
-
-    # Compute mean square error
-    phi = (V.T * P * V)[0, 0]
-
-    # Differentiate phi with respect to Ha, Hb and Hc, and take their corefficients as matrix form
+    # Differentiate phi with respect to Ha, Hb and Hc
+    # Take their corefficients as matrix form
     D = np.array([
-        map(lambda i: diff(phi, Ha).as_coefficients_dict()[i[0, 0]], np.vstack([x, 1])),
-        map(lambda i: diff(phi, Hb).as_coefficients_dict()[i[0, 0]], np.vstack([x, 1])),
-        map(lambda i: diff(phi, Hc).as_coefficients_dict()[i[0, 0]], np.vstack([x, 1]))]).astype(float)
-    # Simplify every equations
+        map(
+            lambda i: diff(phi, Ha).as_coefficients_dict()[i[0, 0]],
+            np.vstack([x, 1])),
+        map(
+            lambda i: diff(phi, Hb).as_coefficients_dict()[i[0, 0]],
+            np.vstack([x, 1])),
+        map(
+            lambda i: diff(phi, Hc).as_coefficients_dict()[i[0, 0]],
+            np.vstack([x, 1]))]).astype(float)
+
     D = np.round(D, 8)
-    D = np.matrix(map(lambda i: D[i] / getGCD(D[i]), [0, 1, 2]))
+    D = np.matrix(
+        map(
+            lambda i: D[i] / getGCD(D[i]),
+            [0, 1, 2]))                     # Simplify every equations
 
-    # Solve unknowns
     Left, Right = D[:, :3], -D[:, 3:]
-    X = Left.I * Right
+    X = Left.I * Right                      # Solve unknowns
 
-    # Compute residual vector
-    V = B * X + f
+    V = B * X + f                           # Compute residual vector
     print "Residual : "
     print "V = \t", str(V.round(4)).replace("\n", "\n\t")
     print
@@ -86,7 +83,6 @@ def longHandApproach(B, P, f, l):
 
 
 def main():
-    # Define coefficient matrix
     B = np.matrix([
         [-1, 0, 0],
         [0, 0, 1],
@@ -94,14 +90,12 @@ def main():
         [0, 1, 0],
         [0, -1, 1],
         [-1, 1, 0],
-        [0, 0, -1]])
+        [0, 0, -1]])                        # Define coefficient matrix
 
-    # Define sigma0 and weight matrix
     s0 = 3.0
     s = np.array([.5, .1, .1, .3, .2, .3, .1])
-    P = np.diag(s0**2/s**2)
+    P = np.diag(s0**2/s**2)                 # Define sigma0 and weight matrix
 
-    # Define f matrix
     f = np.matrix([
         [103.8],
         [-107.4],
@@ -109,9 +103,8 @@ def main():
         [-104.6],
         [-2.8],
         [-1.1],
-        [107.4]])
+        [107.4]])                           # Define f matrix
 
-    # Define vector of obserbation
     l = np.matrix([
         [1.2],
         [2.4],
@@ -119,7 +112,7 @@ def main():
         [-.4],
         [2.8],
         [1.1],
-        [-2.4]])
+        [-2.4]])                            # Define vector of obserbation
 
     # Solve problem with matrix approach
     print "*" * 10 + "Result of matrix approach" + "*" * 10 + "\n"
