@@ -79,7 +79,7 @@ def case3():
     Sigx1 = 0.8
     Sigx2 = 1.5
 
-    print "In the case that x1 and x2 are independent:\n"
+    print "In the case that x1 and x2 are partial dependent:\n"
     Sigx1x2 = c     # Correlation coefficient equals to an unknown parameter c
     SigmaXX = np.matrix([[Sigx1**2, Sigx1x2],   # Define covariance
                          [Sigx1x2, Sigx2**2]])  # matrix of x1 and x2
