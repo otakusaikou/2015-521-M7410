@@ -3,11 +3,14 @@
 from sympy import symbols, diff, sin, cos
 from math import hypot, atan2
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 import sys
 
 
-LANG = sys.stdout.encoding    # Get system language code
+LANG = sys.stdout.encoding          # Get system language code
+SHOWFIG = False                     # A flag for debugging
+np.set_printoptions(suppress=True)  # Disable scientific notation for numpy
 
 
 def getInit(p, q, P, Q):
@@ -23,8 +26,8 @@ def getInit(p, q, P, Q):
         lambda i: hypot(
             p[i[1]] - p[i[0]],
             q[i[1]] - q[i[0]]) / hypot(
-                P[i[1]] - P[i[0]],
-                Q[i[1]] - Q[i[0]]),
+            P[i[1]] - P[i[0]],
+            Q[i[1]] - Q[i[0]]),
         index)
     Sigma0 = sum(Sigma) / len(p)
 
@@ -33,12 +36,12 @@ def getInit(p, q, P, Q):
         lambda i: atan2(
             Q[i[1]] - Q[i[0]],
             P[i[1]] - P[i[0]]) - atan2(
-                q[i[1]] - q[i[0]],
-                p[i[1]] - p[i[0]]),
+            q[i[1]] - q[i[0]],
+            p[i[1]] - p[i[0]]),
         index)
     theta0 = sum(theta) / len(p)
 
-    # Compute initial hoizontal and vertical translation
+    # Compute initial horizontal and vertical translation
     tp0 = (p - Sigma0 * (P * cos(theta0) + Q * sin(theta0))).mean()
     tq0 = (q - Sigma0 * (P * -sin(theta0) + Q * cos(theta0))).mean()
 
@@ -52,47 +55,38 @@ def getPQ(P, Q, Sigma, theta, tp, tq):
     return p, q
 
 
-def drawPt(p, q, P, Q):
-    # Create figure
-    fig = plt.figure(0)
-    fig.add_subplot(111)
+def writeMatrix(fout, mat, dig):
+    # Get number of row and column
+    nrow, ncol = mat.shape
 
-    # Enable grid line
-    plt.grid()
-
-    # Plot all points and line
-    plt.plot(p[:3], q[:3], 'bo')
-    plt.plot(P[:3], Q[:3], 'ro')
-
-    # Show plot
-    plt.show()
+    # Write out matrix values
+    for r in range(nrow):
+        for c in range(ncol):
+            fout.write(("%." + str(dig) + "f  ") % mat[r, c])
+        fout.write("\n")
+    fout.write("\n")
 
 
-def main():
-    # Define input values
-    p = np.array([16.6791, 47.6718, 72.4188, 8.4674, 15.7592, -24.3569])
-    q = np.array([16.1734, 58.7223, 20.8377, 103.4796, -15.7964, 2.3997])
-    P = np.array([10, 23, 60, -30, 21, -23])
-    Q = np.array([20, 71, 45, 98, -10, -8])
-
-    # Define weight matrix
-    W = np.diag(np.ones(12))
-
+def nonlinearApproach(p, q, P, Q, W, s):
     # Define symbols
     try:
-        ps, qs, Ps, Qs, Sigmas, tps, tqs, thetas, dSigmas, dthetas, dtps, dtqs \
-            = symbols(u"p q P Q σ tp tq θ, Δσ, Δθ, Δtp, Δtq".encode(LANG))
+        ps, qs, Ps, Qs, Sigmas, tps, tqs, thetas, dSigmas, dthetas, dtps, \
+            dtqs = symbols(u"p q P Q σ tp tq θ, Δσ, Δθ, Δtp, Δtq".encode(LANG))
     except:
-        ps, qs, Ps, Qs, Sigmas, tps, tqs, thetas, dSigmas, dthetas, dtps, dtqs \
-            = symbols("p q P Q σ tp tq θ, Δσ, Δθ, Δtp, Δtq")
+        ps, qs, Ps, Qs, Sigmas, tps, tqs, thetas, dSigmas, dthetas, dtps, \
+            dtqs = symbols("p q P Q σ tp tq θ, Δσ, Δθ, Δtp, Δtq")
 
     # Create equations object for conformal transformation
     equP, equQ = getPQ(Ps, Qs, Sigmas, thetas, tps, tqs)
 
-    # Define initial resolution values, and loop counter
+    # Define initial resolution values, space list and loop counter
     res_old = 1000
     res_new = 0
-    lc = 0
+    lc = 1
+
+    # Define space lists to record intermediate information
+    res_list = []
+    dX_list = []
 
     # Compute initial values of unknown parameters
     Sigma0, theta0, tp0, tq0 = getInit(p, q, P, Q)
@@ -131,44 +125,196 @@ def main():
         # Compute coefficient matrix
         B = np.matrix([
             map(lambda d: diff(e, d), [dSigmas, dthetas, dtps, dtqs])
-            for e in eqsP + eqsQ])
+            for e in eqsP + eqsQ]).astype(np.double)
 
-        X = (B.T * W * B).I * (B.T * W * f)  # Compute the unknown parameters
-        V = f - B * X                        # Compute residual vector
+        N = B.T * W * B                     # Compute normal matrix
+        t = B.T * W * f                     # Compute t matrix
+        X = N.I * t                         # Compute the unknown parameters
+        V = f - B * X                       # Compute residual vector
 
         # Update residual values
         res_old = res_new
-        res_new = V.T * W * V
+        res_new = (V.T * W * V)[0, 0]
+        res_list.append(res_new)
 
         # Update initial values
         Sigma0 += X[0, 0]
         theta0 += X[1, 0]
         tp0 += X[2, 0]
         tq0 += X[3, 0]
-
-        # Update loop counter
-        lc += 1
+        dX_list.append(np.array(X).astype(np.double))
 
         # Output results
         print ("*" * 10 + "  Iteration count: %d  " + "*" * 10) % lc
         try:
-            print u"Δσ: \t%.12f\nΔθ: \t%.12f\nΔtp: \t%.12f\nΔtq: \t%.12f\n"\
+            print u"Δσ: \t%.18f\nΔθ: \t%.18f\nΔtp: \t%.18f\nΔtq: \t%.18f\n"\
                 .encode(LANG) % tuple((np.array(X).T)[0])
-            print u"σ: \t%.12f\nθ: \t%.12f\ntp: \t%.12f\ntq: \t%.12f\n"\
+            print u"σ: \t%.18f\nθ: \t%.18f\ntp: \t%.18f\ntq: \t%.18f\n"\
                 .encode(LANG) % (Sigma0, theta0, tp0, tq0)
-            print "V.T * P * V = \t\t%.12f" % res_new
-            print u"Δ(V.T * P * V) = \t%.12f\n".encode(LANG)\
-                % (res_old - res_new)
+            print "V.T * P * V = \t\t%.18f" % res_new
+            print u"Δ(V.T * P * V) = \t%.18f\n".encode(LANG)\
+                % abs(res_new - res_old)
         except:
-            print "Δσ: \t%.12f\nΔθ: \t%.12f\nΔtp: \t%.12f\nΔtq: \t%.12f\n"\
+            print "Δσ: \t%.18f\nΔθ: \t%.18f\nΔtp: \t%.18f\nΔtq: \t%.18f\n"\
                 % tuple((np.array(X).T)[0])
-            print "σ: \t%.12f\nθ: \t%.12f\ntp: \t%.12f\ntq: \t%.12f\n"\
+            print "σ: \t%.18f\nθ: \t%.18f\ntp: \t%.18f\ntq: \t%.18f\n"\
                 % (Sigma0, theta0, tp0, tq0)
-            print "V.T * P * V = \t\t%.12f" % res_new
-            print "Δ(V.T * P * V) = \t%.12f\n"\
-                % (res_old - res_new)
+            print "V.T * P * V = \t\t%.18f" % res_new
+            print "Δ(V.T * P * V) = \t%.18f\n"\
+                % abs(res_new - res_old)
 
         print "*" * 17 + "  End  " + "*" * 18 + "\n"
+
+        # Update loop counter
+        lc += 1
+
+    # Compute error of unit weight
+    s0 = (res_new / (B.shape[0] - B.shape[1]))**0.5
+    print "Error of unit weight : %.4f\n" % s0
+
+    # Compute other informations
+    SigmaXX = s**2 * N.I
+    SigmaVV = s**2 * (W.I - B * N.I * B.T)
+    Sigmall = s**2 * W.I
+
+    # Write out sigma matrix results
+    fout = open("SigmaMat.txt", "w")
+    try:
+        fout.write(u"∑ΔΔ = \n".encode(LANG))
+        writeMatrix(fout, SigmaXX, 10)
+
+        fout.write(u"∑VV = \n".encode(LANG))
+        writeMatrix(fout, SigmaVV, 10)
+
+        fout.write(u"∑ll = \n".encode(LANG))
+        writeMatrix(fout, Sigmall, 4)
+    except:
+        fout.write("∑ΔΔ = \n")
+        writeMatrix(fout, SigmaXX, 10)
+
+        fout.write("∑VV = \n")
+        writeMatrix(fout, SigmaVV, 10)
+
+        fout.write("∑ll = \n")
+        writeMatrix(fout, Sigmall, 4)
+    fout.close()
+    print "Covariance matrics have been written to file: 'SigmaMat.txt'..."
+
+    return res_list, np.array(dX_list)
+
+
+def drawFunctionPlot(
+        data, title, ylabel, fig, pos, offset=None, show_plt=False):
+    # Create figure
+    fig = plt.figure(fig, figsize=(12, 9), dpi=80)
+    ax = fig.add_subplot(pos)
+
+    # Enable grid line
+    plt.grid()
+
+    # Disable scientific notation of z axis
+    ax.get_yaxis().get_major_formatter().set_useOffset(False)
+
+    # Set x axis range
+    ax.set_xlim([0, 8])
+
+    # Set y axis interval and range
+    if offset:
+        ax.yaxis.set_major_locator(ticker.MultipleLocator(offset))
+        ax.set_ylim([min(data) - offset, max(data) + offset])
+
+    # Set title and labels
+    plt.title(title, size=12)
+    ax.set_xlabel("Iteration times", fontsize=12)
+    ax.set_ylabel(ylabel, fontsize=12)
+
+    # Plot all input data
+    plt.plot(range(8 - len(data), 8), data, 'bo')
+    plt.plot(range(8 - len(data), 8), data, 'b-')
+
+    # Adjust subplot layout
+    fig.tight_layout()
+
+    # Show plot
+    if show_plt is True:
+        plt.show()
+
+
+def drawPt(p, q, P, Q):
+    # Create figure
+    fig = plt.figure(0)
+    fig.add_subplot(111)
+
+    # Enable grid line
+    plt.grid()
+
+    # Plot all points and line
+    plt.plot(p[:3], q[:3], 'bo')
+    plt.plot(P[:3], Q[:3], 'ro')
+
+    # Show plot
+    plt.show()
+
+
+def main():
+    # Define input values
+    p = np.array([16.6791, 47.6718, 72.4188, 8.4674, 15.7592, -24.3569])
+    q = np.array([16.1734, 58.7223, 20.8377, 103.4796, -15.7964, 2.3997])
+    P = np.array([10, 23, 60, -30, 21, -23])
+    Q = np.array([20, 71, 45, 98, -10, -8])
+
+    # Define weight matrix
+    s = 0.01     # Define a priori error
+    W = np.matrix(np.diag(s**2 / 0.01**2 * np.ones(12)))
+
+    # Solve problem with nonlinear approach
+    res_list, dX_arr = nonlinearApproach(p, q, P, Q, W, s)
+
+    # Draw delta X as functions of iteration number
+    dX_arr.reshape(len(dX_arr), dX_arr.shape[1])
+    dSigma = dX_arr[:, 0]
+    dtheta = dX_arr[:, 1]
+    dtp = dX_arr[:, 2]
+    dtq = dX_arr[:, 3]
+
+    drawFunctionPlot(
+        dSigma,
+        "Relationship between\nvariation of scale and iteration times",
+        "Variation of scale",
+        "0", 221, 2 * 10**-5)
+    drawFunctionPlot(
+        dtheta,
+        "Relationship between\nvariation of rotate angle and iteration times",
+        "Variation of rotate angle (rad)",
+        "0", 222, 2 * 10**-5)
+    drawFunctionPlot(
+        dtp,
+        "Relationship between\nvariation of horizontal shift and iteration"
+        "times",
+        "Variation of horizontal shift (m)",
+        "0", 223, 10**-3)
+    drawFunctionPlot(
+        dtq,
+        "Relationship between\nvariation of vertical shift and iteration"
+        "times",
+        "Variation of vertical shift (m)",
+        "0", 224, 10**-3)
+
+    # Draw delta residuals as functions of iteration number
+    # New residual values divided by the old one
+    div = [res_list[i + 1] / res_list[i] for i in range(len(res_list) - 1)]
+
+    drawFunctionPlot(
+        res_list,
+        "Relationship between\nvariation of residual and iteration times",
+        "Variation of residual",
+        "1", 211)
+    drawFunctionPlot(
+        div,
+        "Relationship between\nvariation of division of residuals and"
+        "iteration times",
+        "Variation of division of residuals",
+        "1", 212, None, SHOWFIG)
 
 
 if __name__ == '__main__':
