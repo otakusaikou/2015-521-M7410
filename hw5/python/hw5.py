@@ -49,9 +49,16 @@ def getInit(p, q, P, Q):
 
 
 def getPQ(P, Q, Sigma, theta, tp, tq):
-    # Define transformation model
+    # Define nonlinear transformation model
     p = Sigma * P * cos(theta) + Sigma * Q * sin(theta) + tp
     q = -Sigma * P * sin(theta) + Sigma * Q * cos(theta) + tq
+    return p, q
+
+
+def getPQ2(P, Q, a, b, tp, tq):
+    # Define linear transformation model
+    p = a * P + b * Q + tp
+    q = -b * P + a * Q + tq
     return p, q
 
 
@@ -118,9 +125,10 @@ def nonlinearApproach(p, q, P, Q, W, s):
             (qs, a), (Ps, b), (Qs, c)]), q, P, Q)
 
         # Compute f matrix for constant term
-        f = -np.matrix(map(lambda x: x.subs([
-            (dSigmas, 0), (dthetas, 0), (dtps, 0), (dtqs, 0)]),
-            eqsP + eqsQ)).T
+        f = -np.matrix(
+            map(lambda x: x.subs([
+                (dSigmas, 0), (dthetas, 0), (dtps, 0), (dtqs, 0)]),
+                eqsP + eqsQ)).T
 
         # Compute coefficient matrix
         B = np.matrix([
@@ -203,6 +211,48 @@ def nonlinearApproach(p, q, P, Q, W, s):
     return res_list, np.array(dX_list)
 
 
+def linearApproach(p, q, P, Q, W, s):
+    # Define symbols
+    ps, qs, Ps, Qs, a, b, tp, tq = symbols("p q P Q a b tp tq")
+
+    # Create equations object for conformal transformation
+    equP, equQ = getPQ2(Ps, Qs, a, b, tp, tq)
+    equP -= ps
+    equQ -= qs
+
+    # Substitute symbols with observation and given values
+    equP = map(lambda a, b, c: equP.subs([
+        (ps, a), (Ps, b), (Qs, c)]), p, P, Q)
+    equQ = map(lambda a, b, c: equQ.subs([
+        (qs, a), (Ps, b), (Qs, c)]), q, P, Q)
+
+    # Compute f matrix for constant term
+    f = -np.matrix(
+        map(lambda x: x.subs([
+            (a, 0), (b, 0), (tp, 0), (tq, 0)]),
+            equP + equQ)).T
+
+    # Compute coefficient matrix
+    B = np.matrix([
+        map(lambda d: diff(e, d), [a, b, tp, tq])
+        for e in equP + equQ]).astype(np.double)
+
+    N = B.T * W * B                     # Compute normal matrix
+    t = B.T * W * f                     # Compute t matrix
+    X = N.I * t                         # Compute the unknown parameters
+    V = f - B * X                       # Compute residual vector
+    res = (V.T * W * V)[0, 0]           # Compute residual square
+
+    # Output results
+    print "a: \t%.18f\nb: \t%.18f\ntp: \t%.18f\ntq: \t%.18f\n"\
+        % tuple((np.array(X).T)[0])
+    print "V.T * P * V = \t\t%.18f" % res
+
+    # Compute error of unit weight
+    s0 = (res / (B.shape[0] - B.shape[1]))**0.5
+    print "Error of unit weight : %.4f\n" % s0
+
+
 def drawFunctionPlot(
         data, title, ylabel, fig, pos, xylim, offset=None, show_plt=False):
     # Create figure
@@ -248,8 +298,8 @@ def drawPt(p, q, P, Q):
     plt.grid()
 
     # Plot all points and line
-    plt.plot(p[:3], q[:3], 'bo')
-    plt.plot(P[:3], Q[:3], 'ro')
+    plt.plot(p, q, 'bo')
+    plt.plot(P, Q, 'ro')
 
     # Show plot
     plt.show()
@@ -262,11 +312,15 @@ def main():
     P = np.array([10, 23, 60, -30, 21, -23])
     Q = np.array([20, 71, 45, 98, -10, -8])
 
+    # Draw points
+    # drawPt(p, q, P, Q)
+
     # Define weight matrix
     s = 0.01     # Define a priori error
     W = np.matrix(np.diag(s**2 / 0.01**2 * np.ones(12)))
 
     # Solve problem with nonlinear approach
+    print "Solve problem with nonlinear approach..."
     res_list, dX_arr = nonlinearApproach(p, q, P, Q, W, s)
 
     # Draw delta X as functions of iteration number
@@ -314,6 +368,10 @@ def main():
         "iteration times",
         "Variation of division of residuals",
         "1", 212, [0, 8, 0, 1.2], None, SHOWFIG)
+
+    # Solve problem with linear approach
+    print "\nSolve problem with linear approach..."
+    linearApproach(p, q, P, Q, W, s)
 
 
 if __name__ == '__main__':
