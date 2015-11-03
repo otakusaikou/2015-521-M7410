@@ -339,7 +339,7 @@ def main():
         dtheta,
         "Relationship between\nvariation of rotate angle and iteration times",
         "Variation of rotate angle (rad)",
-        "0", 222, [0, 8, -1 * 10**-5, 5 * 10**-5], 2 * 10**-5)
+        "0", 222, [0, 8, -1 * 10**-5, 9 * 10**-5], 2 * 10**-5)
     drawFunctionPlot(
         dtp,
         "Relationship between\nvariation of horizontal shift and iteration "
@@ -361,13 +361,13 @@ def main():
         res_list,
         "Relationship between\nvariation of residual and iteration times",
         "Variation of residual",
-        "1", 211, [-1, 8, 0, 0.012])
+        "1", 211, [-1, 8, 0, 0.012], 0.002)
     drawFunctionPlot(
         div,
         "Relationship between\nvariation of division of residuals and "
         "iteration times",
         "Variation of division of residuals",
-        "1", 212, [0, 8, 0, 1.2], None, SHOWFIG)
+        "1", 212, [0, 8, 0, 1.2], 0.2, SHOWFIG)
 
     # Solve problem with linear approach
     print "\nSolve problem with linear approach..."
