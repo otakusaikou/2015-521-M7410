@@ -9,7 +9,7 @@ import sys
 
 
 LANG = sys.stdout.encoding          # Get system language code
-SHOWFIG = False                     # A flag for debugging
+SHOWFIG = True                     # A flag for debugging
 np.set_printoptions(suppress=True)  # Disable scientific notation for numpy
 
 
@@ -289,13 +289,13 @@ def main():
         "0", 222, 2 * 10**-5)
     drawFunctionPlot(
         dtp,
-        "Relationship between\nvariation of horizontal shift and iteration"
+        "Relationship between\nvariation of horizontal shift and iteration "
         "times",
         "Variation of horizontal shift (m)",
         "0", 223, 10**-3)
     drawFunctionPlot(
         dtq,
-        "Relationship between\nvariation of vertical shift and iteration"
+        "Relationship between\nvariation of vertical shift and iteration "
         "times",
         "Variation of vertical shift (m)",
         "0", 224, 10**-3)
@@ -311,7 +311,7 @@ def main():
         "1", 211)
     drawFunctionPlot(
         div,
-        "Relationship between\nvariation of division of residuals and"
+        "Relationship between\nvariation of division of residuals and "
         "iteration times",
         "Variation of division of residuals",
         "1", 212, None, SHOWFIG)
