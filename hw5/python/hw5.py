@@ -81,11 +81,11 @@ def nonlinearApproach(p, q, P, Q, W, s):
 
     # Define initial resolution values, space list and loop counter
     res_old = 1000
-    res_new = 0
+    res_new = 10**-2
     lc = 1
 
     # Define space lists to record intermediate information
-    res_list = []
+    res_list = [res_new]
     dX_list = []
 
     # Compute initial values of unknown parameters
@@ -204,7 +204,7 @@ def nonlinearApproach(p, q, P, Q, W, s):
 
 
 def drawFunctionPlot(
-        data, title, ylabel, fig, pos, offset=None, show_plt=False):
+        data, title, ylabel, fig, pos, xylim, offset=None, show_plt=False):
     # Create figure
     fig = plt.figure(fig, figsize=(12, 9), dpi=80)
     ax = fig.add_subplot(pos)
@@ -215,13 +215,12 @@ def drawFunctionPlot(
     # Disable scientific notation of z axis
     ax.get_yaxis().get_major_formatter().set_useOffset(False)
 
-    # Set x axis range
-    ax.set_xlim([0, 8])
+    # Set x and y axis range
+    ax.axis(xylim)
 
     # Set y axis interval and range
     if offset:
         ax.yaxis.set_major_locator(ticker.MultipleLocator(offset))
-        ax.set_ylim([min(data) - offset, max(data) + offset])
 
     # Set title and labels
     plt.title(title, size=12)
@@ -281,24 +280,24 @@ def main():
         dSigma,
         "Relationship between\nvariation of scale and iteration times",
         "Variation of scale",
-        "0", 221, 2 * 10**-5)
+        "0", 221, [0, 8, -1 * 10**-5, 9 * 10**-5], 2 * 10**-5)
     drawFunctionPlot(
         dtheta,
         "Relationship between\nvariation of rotate angle and iteration times",
         "Variation of rotate angle (rad)",
-        "0", 222, 2 * 10**-5)
+        "0", 222, [0, 8, -1 * 10**-5, 5 * 10**-5], 2 * 10**-5)
     drawFunctionPlot(
         dtp,
         "Relationship between\nvariation of horizontal shift and iteration "
         "times",
         "Variation of horizontal shift (m)",
-        "0", 223, 10**-3)
+        "0", 223, [0, 8, -3.5 * 10**-3, 1.5 * 10**-3], 10**-3)
     drawFunctionPlot(
         dtq,
         "Relationship between\nvariation of vertical shift and iteration "
         "times",
         "Variation of vertical shift (m)",
-        "0", 224, 10**-3)
+        "0", 224, [0, 8, -3.5 * 10**-3, 1.5 * 10**-3], 10**-3)
 
     # Draw delta residuals as functions of iteration number
     # New residual values divided by the old one
@@ -308,13 +307,13 @@ def main():
         res_list,
         "Relationship between\nvariation of residual and iteration times",
         "Variation of residual",
-        "1", 211)
+        "1", 211, [-1, 8, 0, 0.012])
     drawFunctionPlot(
         div,
         "Relationship between\nvariation of division of residuals and "
         "iteration times",
         "Variation of division of residuals",
-        "1", 212, None, SHOWFIG)
+        "1", 212, [0, 8, 0, 1.2], None, SHOWFIG)
 
 
 if __name__ == '__main__':
