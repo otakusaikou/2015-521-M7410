@@ -43,3 +43,42 @@ fprintf('V.T * P * V = \t\t%.18f\n', res);
 % Compute error of unit weight
 s0 = sqrt(res / (size(B, 1) - size(B, 2)));
 fprintf('Error of unit weight : %.4f\n', s0);
+
+% Compute other informations
+SigmaXX = s^2 * inv(N);
+SigmaVV = s^2 * (inv(W) - B * inv(N) * B');
+Sigmallhat = s^2 * B * inv(N) * B';
+
+% Write out sigma matrix results
+fout = fopen('SigmaMat2.txt', 'w');
+fprintf(fout, '∑dXdX = \n', 'n', 'utf-8');
+for r = 1:size(SigmaXX, 1)
+    for c = 1:size(SigmaXX, 2)
+        fprintf(fout, '%.10f  ', SigmaXX(r, c));
+    end
+    fprintf(fout, '\n');
+end
+fprintf(fout, '\n');
+
+fout = fopen('SigmaMat2.txt', 'a');
+fprintf(fout, '∑VV = \n', 'n', 'utf-8');
+for r = 1:size(SigmaVV, 1)
+    for c = 1:size(SigmaVV, 2)
+        fprintf(fout, '%.10f  ', SigmaVV(r, c));
+    end
+    fprintf(fout, '\n');
+end
+fprintf(fout, '\n');
+
+fout = fopen('SigmaMat2.txt', 'a');
+fprintf(fout, '∑llhat = \n', 'n', 'utf-8');
+for r = 1:size(Sigmallhat, 1)
+    for c = 1:size(Sigmallhat, 2)
+        fprintf(fout, '%.10f  ', Sigmallhat(r, c));
+    end
+    fprintf(fout, '\n');
+end
+fprintf(fout, '\n');
+fclose(fout);
+
+fprintf('Covariance matrics have been written to file: ''SigmaMat2.txt''...\n');

@@ -183,7 +183,7 @@ def nonlinearApproach(p, q, P, Q, W, s):
     # Compute other informations
     SigmaXX = s**2 * N.I
     SigmaVV = s**2 * (W.I - B * N.I * B.T)
-    Sigmallhat = s**2 * B * N.I * B.T 
+    Sigmallhat = s**2 * B * N.I * B.T
 
     # Write out sigma matrix results
     fout = open("SigmaMat.txt", "w")
@@ -204,7 +204,7 @@ def nonlinearApproach(p, q, P, Q, W, s):
         writeMatrix(fout, SigmaVV, 10)
 
         fout.write("∑ll = \n")
-        writeMatrix(fout, Sigmall, 4)
+        writeMatrix(fout, Sigmallhat, 10)
     fout.close()
     print "Covariance matrics have been written to file: 'SigmaMat.txt'..."
 
@@ -246,11 +246,39 @@ def linearApproach(p, q, P, Q, W, s):
     # Output results
     print "a: \t%.18f\nb: \t%.18f\ntp: \t%.18f\ntq: \t%.18f\n"\
         % tuple((np.array(X).T)[0])
-    print "V.T * P * V = \t\t%.18f" % res
+    print "V.T * P * V = \t\t%.18f\n" % res
 
     # Compute error of unit weight
     s0 = (res / (B.shape[0] - B.shape[1]))**0.5
     print "Error of unit weight : %.4f\n" % s0
+
+    # Compute other informations
+    SigmaXX = s**2 * N.I
+    SigmaVV = s**2 * (W.I - B * N.I * B.T)
+    Sigmallhat = s**2 * B * N.I * B.T
+
+    # Write out sigma matrix results
+    fout = open("SigmaMat2.txt", "w")
+    try:
+        fout.write(u"∑ΔΔ = \n".encode(LANG))
+        writeMatrix(fout, SigmaXX, 10)
+
+        fout.write(u"∑VV = \n".encode(LANG))
+        writeMatrix(fout, SigmaVV, 10)
+
+        fout.write(u"∑llhat = \n".encode(LANG))
+        writeMatrix(fout, Sigmallhat, 10)
+    except:
+        fout.write("∑ΔΔ = \n")
+        writeMatrix(fout, SigmaXX, 10)
+
+        fout.write("∑VV = \n")
+        writeMatrix(fout, SigmaVV, 10)
+
+        fout.write("∑ll = \n")
+        writeMatrix(fout, Sigmallhat, 10)
+    fout.close()
+    print "Covariance matrics have been written to file: 'SigmaMat2.txt'..."
 
 
 def drawFunctionPlot(
@@ -287,22 +315,6 @@ def drawFunctionPlot(
     # Show plot
     if show_plt is True:
         plt.show()
-
-
-def drawPt(p, q, P, Q):
-    # Create figure
-    fig = plt.figure(0)
-    fig.add_subplot(111)
-
-    # Enable grid line
-    plt.grid()
-
-    # Plot all points and line
-    plt.plot(p, q, 'bo')
-    plt.plot(P, Q, 'ro')
-
-    # Show plot
-    plt.show()
 
 
 def main():
