@@ -114,7 +114,7 @@ fprintf('Error of unit weight : %.4f\n', s0);
 % Compute other informations
 SigmaXX = s^2 * inv(N);
 SigmaVV = s^2 * (inv(W) - B * inv(N) * B');
-Sigmall = s^2 * inv(W);
+Sigmallhat = s^2 * B * inv(N) * B';
 
 % Write out sigma matrix results
 fout = fopen('SigmaMat.txt', 'w');
@@ -138,10 +138,10 @@ end
 fprintf(fout, '\n');
 
 fout = fopen('SigmaMat.txt', 'a');
-fprintf(fout, '∑ll = \n', 'n', 'utf-8');
-for r = 1:size(Sigmall, 1)
-    for c = 1:size(Sigmall, 2)
-        fprintf(fout, '%.4f  ', Sigmall(r, c));
+fprintf(fout, '∑llhat = \n', 'n', 'utf-8');
+for r = 1:size(Sigmallhat, 1)
+    for c = 1:size(Sigmallhat, 2)
+        fprintf(fout, '%.10f  ', Sigmallhat(r, c));
     end
     fprintf(fout, '\n');
 end
