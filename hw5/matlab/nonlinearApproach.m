@@ -138,7 +138,7 @@ end
 fprintf(fout, '\n');
 
 fout = fopen('SigmaMat.txt', 'a');
-fprintf(fout, '∑VV = \n', 'n', 'utf-8');
+fprintf(fout, '∑ll = \n', 'n', 'utf-8');
 for r = 1:size(Sigmall, 1)
     for c = 1:size(Sigmall, 2)
         fprintf(fout, '%.4f  ', Sigmall(r, c));

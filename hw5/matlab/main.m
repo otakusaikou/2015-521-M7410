@@ -106,4 +106,6 @@ drawFunctionPlot(...
                  [0, 6, 0, 1.2],...
                  0.2);
 
-
+% Solve problem with linear approach
+fprintf('Solve problem with linear approach...\n');
+linearApproach(p, q, P, Q, W, s);
