@@ -148,4 +148,4 @@ end
 fprintf(fout, '\n');
 fclose(fout);
 
-fprintf('Covariance matrics have been written to file: ''SigmaMat.txt''...\n');
+fprintf('Covariance matrices have been written to file: ''SigmaMat.txt''...\n');

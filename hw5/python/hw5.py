@@ -206,7 +206,7 @@ def nonlinearApproach(p, q, P, Q, W, s):
         fout.write("∑ll = \n")
         writeMatrix(fout, Sigmallhat, 10)
     fout.close()
-    print "Covariance matrics have been written to file: 'SigmaMat.txt'..."
+    print "Covariance matrices have been written to file: 'SigmaMat.txt'..."
 
     return res_list, np.array(dX_list)
 
@@ -278,7 +278,7 @@ def linearApproach(p, q, P, Q, W, s):
         fout.write("∑ll = \n")
         writeMatrix(fout, Sigmallhat, 10)
     fout.close()
-    print "Covariance matrics have been written to file: 'SigmaMat2.txt'..."
+    print "Covariance matrices have been written to file: 'SigmaMat2.txt'..."
 
 
 def drawFunctionPlot(
