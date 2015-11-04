@@ -34,7 +34,7 @@ N = B' * W * B;                      % Compute normal matrix
 t = B' * W * f;                      % Compute t matrix
 X = inv(N) * t;                      % Compute the unknown parameters
 V = f - B * X;                       % Compute residual vector
-res = (V' * W * V);              % Compute residual square
+res = (V' * W * V);                  % Compute residual square
 
 % Output results
 fprintf('a: \t%.18f\nb: \t%.18f\ntp: \t%.18f\ntq: \t%.18f\n', X)
@@ -81,4 +81,4 @@ end
 fprintf(fout, '\n');
 fclose(fout);
 
-fprintf('Covariance matrics have been written to file: ''SigmaMat2.txt''...\n');
+fprintf('Covariance matrices have been written to file: ''SigmaMat2.txt''...\n');
