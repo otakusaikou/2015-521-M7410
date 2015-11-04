@@ -183,7 +183,7 @@ def nonlinearApproach(p, q, P, Q, W, s):
     # Compute other informations
     SigmaXX = s**2 * N.I
     SigmaVV = s**2 * (W.I - B * N.I * B.T)
-    Sigmall = s**2 * W.I
+    Sigmallhat = s**2 * B * N.I * B.T 
 
     # Write out sigma matrix results
     fout = open("SigmaMat.txt", "w")
@@ -194,8 +194,8 @@ def nonlinearApproach(p, q, P, Q, W, s):
         fout.write(u"∑VV = \n".encode(LANG))
         writeMatrix(fout, SigmaVV, 10)
 
-        fout.write(u"∑ll = \n".encode(LANG))
-        writeMatrix(fout, Sigmall, 4)
+        fout.write(u"∑llhat = \n".encode(LANG))
+        writeMatrix(fout, Sigmallhat, 10)
     except:
         fout.write("∑ΔΔ = \n")
         writeMatrix(fout, SigmaXX, 10)
