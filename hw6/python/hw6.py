@@ -77,10 +77,10 @@ def nonlinearApproach(p, q, P, Q, W, s):
         Sigmas, tps, tqs, thetas, dSigmas, dthetas, dtps, \
             dtqs = symbols("σ tp tq θ, Δσ, Δθ, Δtp, Δtq")
 
-    ps = symbols("p1:7")
-    qs = symbols("q1:7")
-    Ps = symbols("P1:7")
-    Qs = symbols("Q1:7")
+    ps = symbols("p1:%d" % (len(p) + 1))
+    qs = symbols("q1:%d" % (len(p) + 1))
+    Ps = symbols("P1:%d" % (len(p) + 1))
+    Qs = symbols("Q1:%d" % (len(p) + 1))
 
     # Create equations object for conformal transformation
     equP, equQ = np.hsplit(np.array(map(lambda (a, b, c, d): getPQ(
