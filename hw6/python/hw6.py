@@ -253,8 +253,8 @@ def drawFunctionPlot(
     ax.set_ylabel(ylabel, fontsize=12)
 
     # Plot all input data
-    plt.plot(range(5 - len(data), 5), data, 'bo')
-    plt.plot(range(5 - len(data), 5), data, 'b-')
+    plt.plot(range(6 - len(data), 6), data, 'bo')
+    plt.plot(range(6 - len(data), 6), data, 'b-')
 
     # Adjust subplot layout
     fig.tight_layout()
@@ -291,24 +291,24 @@ def main():
         dSigma,
         "Relationship between\nvariation of scale and iteration times",
         "Variation of scale",
-        "0", 221, [0, 5, -1 * 10**-5, 9 * 10**-5], 2 * 10**-5)
+        "0", 221, [0, 6, -1 * 10**-5, 9 * 10**-5], 2 * 10**-5)
     drawFunctionPlot(
         dtheta,
         "Relationship between\nvariation of rotate angle and iteration times",
         "Variation of rotate angle (rad)",
-        "0", 222, [0, 5, -1 * 10**-5, 9 * 10**-5], 2 * 10**-5)
+        "0", 222, [0, 6, -1 * 10**-5, 9 * 10**-5], 2 * 10**-5)
     drawFunctionPlot(
         dtp,
         "Relationship between\nvariation of horizontal shift and iteration "
         "times",
         "Variation of horizontal shift (m)",
-        "0", 223, [0, 5, -3.5 * 10**-3, 1.5 * 10**-3], 10**-3)
+        "0", 223, [0, 6, -3.5 * 10**-3, 1.5 * 10**-3], 10**-3)
     drawFunctionPlot(
         dtq,
         "Relationship between\nvariation of vertical shift and iteration "
         "times",
         "Variation of vertical shift (m)",
-        "0", 224, [0, 5, -3.5 * 10**-3, 1.5 * 10**-3], 10**-3)
+        "0", 224, [0, 6, -3.5 * 10**-3, 1.5 * 10**-3], 10**-3)
 
     # Draw delta residuals as functions of iteration number
     # New residual values divided by the old one
@@ -318,13 +318,13 @@ def main():
         res_list,
         "Relationship between\nvariation of residual and iteration times",
         "Variation of residual",
-        "1", 211, [-1, 5, 0, 0.012], 0.002)
+        "1", 211, [-1, 6, 0, 0.012], 0.002)
     drawFunctionPlot(
         div,
         "Relationship between\nvariation of division of residuals and "
         "iteration times",
         "Variation of division of residuals",
-        "1", 212, [0, 5, 0, 1.2], 0.2, SHOWFIG)
+        "1", 212, [0, 6, 0, 1.2], 0.2, SHOWFIG)
 
 
 if __name__ == '__main__':
