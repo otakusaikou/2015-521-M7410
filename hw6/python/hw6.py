@@ -199,7 +199,8 @@ def nonlinearApproach(p, q, P, Q, W, s):
 
     # Compute other informations
     SigmaXX = s**2 * N.I
-    SigmaVV = (W.I * A.T * We * B) * SigmaXX * (W.I * A.T * We * B).T
+    SigmaVV = s**2 * (W.I * A.T - W.I * A.T * We * B * N.I * B.T)\
+        * (W.I * A.T * We - W.I * A.T * We * B * N.I * B.T * We).T
     Sigmallhat = (s**2 * W.I) - SigmaVV
 
     # Write out sigma matrix results

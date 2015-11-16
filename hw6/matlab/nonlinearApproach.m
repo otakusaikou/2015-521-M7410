@@ -135,7 +135,9 @@ fprintf('Error of unit weight : %.4f\n', s0);
 
 % Compute other informations
 SigmaXX = s^2 * inv(N);
-SigmaVV = (inv(W) * A' * We * B) * SigmaXX * (inv(W) * A' * We * B)';
+SigmaVV = s^2 * (inv(W) * A' - inv(W) * A' * We * B * inv(N) * B')...
+    * (inv(W) * A' * We - inv(W) * A' * We * B * inv(N) * B' * We)';
+
 Sigmallhat = (s^2 * inv(W)) - SigmaVV;
 
 % Write out sigma matrix results
