@@ -1,0 +1,2 @@
+F=\begin{bmatrix}
+F_{p1} & F_{p2} & ... & F_{q1} & F_{q2} & ... & F_{q6} & \end{bmatrix}^T

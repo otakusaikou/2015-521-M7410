@@ -1,0 +1,6 @@
+B=\frac{\partial F}{\partial X}=\begin{bmatrix}
+\frac{\partial F_{p1}}{\partial \sigma } & \frac{\partial F_{p1}}{\partial \theta} & \frac{\partial F_{p1}}{\partial t_{p}} & \frac{\partial F_{p1}}{\partial t_{q}}\\
+\frac{\partial F_{p2}}{\partial \sigma} & \frac{\partial F_{p2}}{\partial \theta} & \frac{\partial F_{p2}}{\partial t_{p}} & \frac{\partial F_{p2}}{\partial t_{q}}\\
+\vdots & \vdots & \vdots & \vdots\\
+\frac{\partial F_{q6}}{\partial \sigma} & \frac{\partial F_{q6}}{\partial \theta} & \frac{\partial F_{q6}}{\partial t_{p}} & \frac{\partial F_{q6}}{\partial t_{q}}\\
+\end{bmatrix}

@@ -1,0 +1,9 @@
+A=\frac{\partial F}{\partial l}=\begin{bmatrix}
+\frac{\partial F_{p1}}{\partial p_{1}} & \frac{\partial F_{p1}}{\partial q_{1}} & \frac{\partial F_{p1}}{\partial P_{1}} & \frac{\partial F_{p1}}{\partial Q_{1}} & ... &
+\frac{\partial F_{p1}}{\partial P_{6}} & \frac{\partial F_{p1}}{\partial Q_{6}}\\ 
+\frac{\partial F_{p2}}{\partial p_{1}} & \frac{\partial F_{p2}}{\partial q_{1}} & \frac{\partial F_{p2}}{\partial P_{1}} & \frac{\partial F_{p2}}{\partial Q_{1}} & ... &
+\frac{\partial F_{p2}}{\partial P_{6}} & \frac{\partial F_{p2}}{\partial Q_{6}}\\ 
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\ 
+\frac{\partial F_{q6}}{\partial p_{1}} & \frac{\partial F_{q6}}{\partial q_{1}} & \frac{\partial F_{q6}}{\partial P_{1}} & \frac{\partial F_{q6}}{\partial Q_{1}} & ... &
+\frac{\partial F_{q6}}{\partial P_{6}} & \frac{\partial F_{q6}}{\partial Q_{6}}\\ 
+\end{bmatrix}

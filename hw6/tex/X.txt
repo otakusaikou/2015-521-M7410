@@ -1,0 +1,2 @@
+X=\begin{bmatrix}
+\sigma & \theta & t_{p} & t_{q}\end{bmatrix}^T

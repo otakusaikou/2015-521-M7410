@@ -1,0 +1,2 @@
+l=\begin{bmatrix}
+p_{1} & q_{1} & P_{1} & Q_{1} & p_{2} & q_{2} & ... & Q_{6} & \end{bmatrix}^T
