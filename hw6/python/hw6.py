@@ -254,8 +254,8 @@ def drawFunctionPlot(
     ax.set_ylabel(ylabel, fontsize=12)
 
     # Plot all input data
-    plt.plot(range(6 - len(data), 6), data, 'bo')
-    plt.plot(range(6 - len(data), 6), data, 'b-')
+    plt.plot(range(5 - len(data), 5), data, 'bo')
+    plt.plot(range(5 - len(data), 5), data, 'b-')
 
     # Adjust subplot layout
     fig.tight_layout()
