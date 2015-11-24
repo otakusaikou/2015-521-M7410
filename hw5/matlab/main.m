@@ -5,10 +5,10 @@ clc;
 format long g;
 
 % Define input values
-p = [16.6791, 47.6718, 72.4188, 8.4674, 15.7592, -24.3569];
-q = [16.1734, 58.7223, 20.8377, 103.4796, -15.7964, 2.3997];
-P = [10, 23, 60, -30, 21, -23];
-Q = [20, 71, 45, 98, -10, -8];
+p = [16.6791 47.6718 72.4188 8.4674 15.7592 -24.3569];
+q = [16.1734 58.7223 20.8377 103.4796 -15.7964 2.3997];
+P = [10 23 60 -30 21 -23];
+Q = [20 71 45 98 -10 -8];
 
 % Define sigma0 and weight matrix
 s = 0.01;       % Define a priori error
@@ -17,7 +17,7 @@ W = diag(s./0.01 * ones(1, 12))^2;
 % Solve problem with nonlinear approach
 fprintf('Solve problem with nonlinear approach...\n');
 
-[res_mat, X_mat] = nonlinearApproach(p, q, P, Q, W, s);
+[res_mat X_mat] = nonlinearApproach(p, q, P, Q, W, s);
 
 % Draw delta X as functions of iteration number
 dSigma = X_mat(1, :);
@@ -78,7 +78,7 @@ drawFunctionPlot(...
 
 % Draw delta residuals as functions of iteration number
 % New residual values divided by the old one
-div = res_mat(2:size(res_mat, 2)) ./ res_mat(1:size(res_mat, 2) - 1); 
+div = res_mat(2:size(res_mat, 2)) ./ res_mat(1:size(res_mat, 2) - 1);
 
 % Create figure 2
 figure('Name', 'fig2', 'position', [0 0 1000 1000]);
@@ -91,7 +91,7 @@ drawFunctionPlot(...
                  'Variation of residual',...
                  4,...
                  211,...
-                 [-1, 6, 0, 0.012],...
+                 [-1 6 0 0.012],...
                  0.002,...
                  -1);
 
@@ -103,7 +103,7 @@ drawFunctionPlot(...
                  'Variation of division of residuals',...
                  4,...
                  212,...
-                 [0, 6, 0, 1.2],...
+                 [0 6 0 1.2],...
                  0.2);
 
 % Solve problem with linear approach

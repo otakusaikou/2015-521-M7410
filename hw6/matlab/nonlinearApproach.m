@@ -46,9 +46,9 @@ P0 = P;
 Q0 = Q;
 p0 = p;
 q0 = q;
-l0 = [p0(:), q0(:), P0(:), Q0(:)]';
+l0 = [p0(:) q0(:) P0(:) Q0(:)]';
 l0 = l0(:);
-l = [p(:), q(:), P(:), Q(:)]';              % Observations with matrix form
+l = [p(:) q(:) P(:) Q(:)]';              % Observations with matrix form
 l = l(:);                                   % Observations with matrix form
 X = ones(1);                                % Initial value for iteration
 
@@ -59,7 +59,7 @@ while abs(sum(X)) > 10^-15
     A = [];
     B = [];
     F0 = [];
-    ls_ = [ps(:), qs(:), Ps(:), Qs(:)]';
+    ls_ = [ps(:) qs(:) Ps(:) Qs(:)]';
     Xs = [Sigs ts tps tqs];
     for f = F
         % Compute Jacobian matrix of F function with respect to l

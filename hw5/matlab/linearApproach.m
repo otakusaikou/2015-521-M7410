@@ -1,5 +1,5 @@
 function [] = linearApproach(p, q, P, Q, W, s)
-% Define symbols for p q P Q a b tp tq 
+% Define symbols for p q P Q a b tp tq
 syms ps qs Ps Qs a b tp tq;
 
 % Define nonlinear transformation model
