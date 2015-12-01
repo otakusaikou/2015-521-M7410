@@ -12,6 +12,7 @@ This project require [Python v2.7.X](https://www.python.org) and the following m
 
 -[Numpy](http://www.numpy.org)  
 -[Matplotlib](http://matplotlib.org)  
+-[Sympy](http://www.sympy.org/en/index.html)  
 
 ###Matlab
 MATLAB R2010a or higher.
