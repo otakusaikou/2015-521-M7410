@@ -1,0 +1,4 @@
+=\left[\begin{matrix}a^{0} & -1 & 0 & 0\\0 & 0 & a^{0} & -1\\\frac{ X_{D}^{0} - 4}{\left\sqrt{(Y_{D}^{0})^{2} + \left(X_{D}^{0} - 4\right)^{2}\right}} & \frac{ Y_{D}^{0}}{\left\sqrt{(Y_{D}^{0})^{2} + \left(X_{D}^{0} - 4\right)^{2}\right}} & 0 &
+0\\\frac{ X_{D}^{0} -  X_{E}^{0}}{\left\sqrt{\left(- X_{D}^{0} + X_{E}^{0}\right)^{2} + \left(-Y_{D}^{0} + Y_{E}^{0}\right)^{2}\right}} & \frac{ Y_{D}^{0} -  Y_{E}^{0}}{\left\sqrt{\left(- X_{D}^{0} + X_{E}^{0}\right)^{2} + \left(- Y_{D}^{0} + Y_{E}^{0}\right)^{2}\right
+}} & \frac{-  X_{D}^{0} +  X_{E}^{0}}{\left\sqrt{\left(- X_{D}^{0} + X_{E}^{0}\right)^{2} + \left(- Y_{D}^{0} + Y_{E}^{0}\right)^{2}\right}} & \frac{-  Y_{D}^{0} +  Y_{E}^{0}}{\left\sqrt{\left(- X_{D}^{0} + X_{E}^{0}\right)^{2} + \left(- Y_{D}^{0} + Y_{E}^{0}\right)^{2}\right
+}}\end{matrix}\right]
