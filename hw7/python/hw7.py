@@ -54,10 +54,10 @@ def getPseudoInit(Xp, Yp, x0, c=1):
 def getEqn(Xp, Yp, xs, ls):
     """List observation equations"""
     F = Matrix([
-        [(xs[2] - Xp[0])**2 + (xs[3] - Yp[0])**2 - ls[0]**2],
-        [(xs[0] - Xp[0])**2 + (xs[1] - Yp[0])**2 - ls[1]**2],
-        [(xs[0] - Xp[2])**2 + (xs[1] - Yp[2])**2 - ls[2]**2],
-        [(xs[2] - Xp[2])**2 + (xs[3] - Yp[2])**2 - ls[3]**2]])
+        [-((xs[2] - Xp[0])**2 + (xs[3] - Yp[0])**2)**.5 + ls[0]],
+        [-((xs[0] - Xp[0])**2 + (xs[1] - Yp[0])**2)**.5 + ls[1]],
+        [-((xs[0] - Xp[2])**2 + (xs[1] - Yp[2])**2)**.5 + ls[2]],
+        [-((xs[2] - Xp[2])**2 + (xs[3] - Yp[2])**2)**.5 + ls[3]]])
 
     return F
 
@@ -352,7 +352,7 @@ def generalC2(Xp, Yp, l, w, xs, ls, xs2, c=1):
     QXX = N.I * (
         np.identity(N.shape[0]) - D1.T * P.I * D1 * N.I
         + D1.T * P.I * D2 * R.I * D2.T * P.I * D1 * N.I)
-    QXX2 = (R.I).T
+    QXX2 = R.I
     SigmaXX = s0**2 * QXX
     SigmaXX2 = s0**2 * QXX2
     param_std = np.sqrt(np.diag(SigmaXX))
@@ -380,6 +380,8 @@ def generalC2(Xp, Yp, l, w, xs, ls, xs2, c=1):
     print "\nCofactor matrix:"
     print u"QΔΔ =".encode(LANG)
     print QXX
+    print u"QΔΔ' =".encode(LANG)
+    print QXX2
     print ("*" * 26 + "  End  " + "*" * 26)
 
 
@@ -421,8 +423,9 @@ def main():
     generalC(Xp, Yp, l, w, xs, ls, 2)
 
     # Assume pseudo unknown parameters a and b
-    print "\nFor case in which point B, D and E lie on a straight line.\n" \
-          "Assume pseudo unknown parameters..."
+    print "\nFor case in which point B, D and E lie on a straight line\n" \
+          "and point D is the midpoint of BE. Assume pseudo unknown\n" \
+          "parameters..."
 
     # Define pseudo unknown parameters
     xs2 = getPseudoParam(2)
