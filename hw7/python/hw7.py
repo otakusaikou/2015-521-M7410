@@ -239,7 +239,7 @@ def generalC(Xp, Yp, l, w, xs, ls, c=1):
     V = A.T * We * (f - B * X)
 
     # Compute error of unit weight
-    s0 = ((V.T * V)[0, 0] / (B.shape[0] - (B.shape[1] - C.shape[0])))**0.5
+    s0 = ((V.T * W * V)[0, 0] / (B.shape[0] - (B.shape[1] - C.shape[0])))**0.5
 
     # Compute other information
     QXX = (np.identity(N.shape[0]) - N.I * C.T * M.I * C) * N.I
@@ -346,7 +346,7 @@ def generalC2(Xp, Yp, l, w, xs, ls, xs2, c=1):
     V = A.T * We * (f - B * X)
 
     # Compute error of unit weight
-    s0 = ((V.T * V)[0, 0] / (B.shape[0] - (B.shape[1] - D2.shape[1])))**0.5
+    s0 = ((V.T * W * V)[0, 0] / (B.shape[0] - (B.shape[1] - D2.shape[1])))**0.5
 
     # Compute other information
     QXX = N.I * (
