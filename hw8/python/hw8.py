@@ -106,10 +106,10 @@ def unified(Xp, Yp, ls, l, W, xs, Wxx, sig0):
         counter += 1    # Update Loop counter
 
     # Compute residual vectors for unknown parameters observations
-    Vx = np.array(x0 - lx + X)
+    Vx = np.matrix(x0 - lx + X)
 
     # Compute error of unit weight
-    s0 = ((V.T * V)[0, 0] / (len(l0)))**0.5
+    s0 = (((V.T*W*V)[0, 0]+(Vx.T*Wxx*Vx)[0, 0]) / (len(l0)))**0.5
 
     # Compute other information
     QXX = (N + Wxx).I
@@ -231,10 +231,11 @@ def unifiedC(Xp, Yp, ls, l, W, xs, Wxx, lc, lcs, Wcc, sig0):
         counter += 1    # Update Loop counter
 
     # Compute residual vectors for unknown parameters observations
-    Vx = np.array(x0 - lx + X)
+    Vx = np.matrix(x0 - lx + X)
 
     # Compute error of unit weight
-    s0 = np.double(((V.T * V)[0, 0] / (len(l0) + len(lc)))**0.5)
+    s0 = (((V.T*W*V)[0, 0]+(Vc.T*Wcc*Vc)[0, 0]+(Vx.T*Wxx*Vx)[0, 0])
+          / (len(l0)+len(lc)))**0.5
 
     # Compute other information
     QXX = (N + Nc + Wxx).I
@@ -290,7 +291,7 @@ def main():
     # Define weight vector
     w = np.array([.02, .02, .02, .02])
     SigBC = .01         # Error in coordinates of point B and C
-    SigDE = 1000        # Error in coordinates of point D and E
+    SigDE = np.double("Inf")        # Error in coordinates of point D and E
     wxx = np.append(np.ones(4) * SigBC, np.ones(4) * SigDE)
 
     sig0 = .02          # Define a priori error
