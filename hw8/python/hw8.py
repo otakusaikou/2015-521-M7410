@@ -94,7 +94,7 @@ def unified(Xp, Yp, ls, l, W, xs, Wxx, sig0):
         N = (B.T * We * B)                 # Compute normal matrix
         t = (B.T * We * f)                 # Compute t matrix
         X = (N + Wxx).I * (t - Wxx * fx)   # Compute the unknown parameters
-        V = A.T * We * (f - B * X)         # Compute residual vector
+        V = Q * A.T * We * (f - B * X)     # Compute residual vector
 
         # Update initial values
         X = X.astype(np.double)
@@ -217,8 +217,8 @@ def unifiedC(Xp, Yp, ls, l, W, xs, Wxx, lc, lcs, Wcc, sig0):
         X = (N + Nc + Wxx).I * (t + tc - Wxx * fx)
 
         # Compute residual vectors
-        V = A.T * We * (f - B * X)
-        Vc = Ac.T * Wec * (fc - C * X)
+        V = Q * A.T * We * (f - B * X)
+        Vc = Qcc * Ac.T * Wec * (fc - C * X)
 
         # Update initial values
         X = X.astype(np.double)
@@ -272,7 +272,7 @@ def unifiedC(Xp, Yp, ls, l, W, xs, Wxx, lc, lcs, Wcc, sig0):
     print u"QΔΔ =".encode(LANG)
     print QXX
 
-    print "\nStandard error of unit weight : %.4f" % s0
+    print "\nStandard error of unit weight : %.6f" % s0
     print "Degree of freedom: %d" % (len(l0) + len(lc))
     print ("*" * 26 + "  End  " + "*" * 26)
 
@@ -291,7 +291,7 @@ def main():
     # Define weight vector
     w = np.array([.02, .02, .02, .02])
     SigBC = .01         # Error in coordinates of point B and C
-    SigDE = np.double("Inf")        # Error in coordinates of point D and E
+    SigDE = np.double("Inf")    # Error in coordinates of point D and E
     wxx = np.append(np.ones(4) * SigBC, np.ones(4) * SigDE)
 
     sig0 = .02          # Define a priori error
@@ -312,7 +312,8 @@ def main():
 
     # Weight of constraint
     # Define weight vector of constraint
-    wcc = np.array([.002])
+    # The weight of constraint condition is a big number
+    wcc = np.array([0.00000002])
 
     # Compute weight matrix for constraint
     Wcc = np.matrix(np.diag(sig0**2 / wcc**2))
