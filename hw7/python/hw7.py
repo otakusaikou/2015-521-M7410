@@ -139,7 +139,7 @@ def general(Xp, Yp, l, w, xs, ls):
         N = (B.T * We * B)                  # Compute normal matrix
         t = (B.T * We * f)                  # Compute t matrix
         X = N.I * t                         # Compute the unknown parameters
-        V = A.T * We * (f - B * X)          # Compute residual vector
+        V = Q * A.T * We * (f - B * X)          # Compute residual vector
 
         # Update initial values
         x0 += X
@@ -236,7 +236,7 @@ def generalC(Xp, Yp, l, w, xs, ls, c=1):
         lc += 1         # Update Loop counter
 
     # Compute residual vector
-    V = A.T * We * (f - B * X)
+    V = Q * A.T * We * (f - B * X)
 
     # Compute error of unit weight
     s0 = ((V.T * W * V)[0, 0] / (B.shape[0] - (B.shape[1] - C.shape[0])))**0.5
@@ -343,7 +343,7 @@ def generalC2(Xp, Yp, l, w, xs, ls, xs2, c=1):
         lc += 1         # Update Loop counter
 
     # Compute residual vector
-    V = A.T * We * (f - B * X)
+    V = Q * A.T * We * (f - B * X)
 
     # Compute error of unit weight
     s0 = ((V.T * W * V)[0, 0] / (B.shape[0] - (B.shape[1] - D2.shape[1])))**0.5
