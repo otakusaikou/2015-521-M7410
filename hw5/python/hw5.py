@@ -290,7 +290,7 @@ def drawFunctionPlot(
     # Enable grid line
     plt.grid()
 
-    # Disable scientific notation of z axis
+    # Disable scientific notation of y axis
     ax.get_yaxis().get_major_formatter().set_useOffset(False)
 
     # Set x and y axis range
