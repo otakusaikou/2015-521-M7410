@@ -109,9 +109,11 @@ def drawLines(xp, slope, intercept, annotation=False):
     ax = fig.add_subplot(111)
 
     # Set equal axis and extent of x y axis
-    plt.axis("equal")
-    plt.axis([0, 4, 10, 26])
-    plt.grid()  # Enable grid
+    ax.axis("equal")
+    ax.axis([0, 4, 0, 30])
+    ax.grid()  # Enable grid
+    ax.spines["left"].set_position("zero")
+    ax.spines["bottom"].set_position("zero")
 
     # Set x y label and title
     plt.title("Line variation plot", size=20)
@@ -119,9 +121,11 @@ def drawLines(xp, slope, intercept, annotation=False):
     plt.ylabel("Y", size=15)
 
     # Draw lines
+    x = np.linspace(-5, 5, 5)
     xp = np.delete(xp, -1)
     for i in range(len(slope)):
-        ax.plot(xp, intercept[i] + xp * slope[i])
+        ax.plot(x, intercept[i] + x * slope[i])
+        ax.plot(xp, intercept[i] + xp * slope[i], "ro")
 
     # Add annotation if the flag is true
     if annotation:
