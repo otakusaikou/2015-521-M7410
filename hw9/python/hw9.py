@@ -41,10 +41,7 @@ def addObs(xp, l, ls, W, lx, X0, Xs, Wxx, M0, taw0):
     # Get coefficient matrix and constants matrix
     B, f = getCoeffConst(xp, l, ls, W, lx, X0, Xs)
 
-    # Compute normal matrix and constants matrix with only unknown parameters
-    # observables
-
-    # Add observable
+    # Update normal matrix and constants matrix
     Q = W.I
     M1 = (M0.I * (np.identity(len(Xs)) - B.T * (Q+B*M0.I*B.T).I * B * M0.I)).I
     taw1 = taw0 + B.T * W * f
@@ -61,10 +58,8 @@ def subObs(xp, l, ls, W, lx, X0, Xs, Wxx, M0, taw0):
     # Get coefficient matrix and constants matrix
     B, f = getCoeffConst(xp, l, ls, W, lx, X0, Xs)
 
-    # Compute normal matrix and constants matrix with only unknown parameters
-    # observables
-
-    # Add observable
+    # Update normal matrix and constants matrix
+    Q = W.I
     Q = W.I
     M1 = (M0.I * (np.identity(len(Xs)) + B.T * (Q-B*M0.I*B.T).I * B * M0.I)).I
     taw1 = taw0 - B.T * W * f
