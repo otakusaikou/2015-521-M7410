@@ -102,7 +102,7 @@ def unified(xp, l, ls, W, lx, X0, Xs, Wxx):
     return M, taw
 
 
-def drawLines(xp, slope, intercept, annotation=False):
+def drawLines(xp, l, slope, intercept, annotation=False):
     """Draw lines with given slope and intercept"""
     # Create figure
     fig = plt.figure(0, figsize=(12, 9), dpi=70)
@@ -123,16 +123,17 @@ def drawLines(xp, slope, intercept, annotation=False):
     # Draw lines
     x = np.linspace(-5, 5, 5)
     xp = np.delete(xp, -1)
+    l = np.delete(l, -1)
     for i in range(len(slope)):
         ax.plot(x, intercept[i] + x * slope[i])
-        ax.plot(xp, intercept[i] + xp * slope[i], "ro")
+        ax.plot(xp, l, "ro")
 
     # Add annotation if the flag is true
     if annotation:
         for i in range(len(slope)):
             ax.annotate(
-                "$y=%.6fx+%.6f$" % (slope[i], intercept[i]),
-                xy=(xp[-1], xp[-1] * slope[i] + intercept[i]),
+                "$1%s: y=%.6fx+%.6f$" % (chr(97+i), slope[i], intercept[i]),
+                xy=(xp[-4], xp[-4] * slope[i] + intercept[i]),
                 xytext=(40, 20), textcoords="offset points", va="center",
                 size=15,
                 arrowprops=dict(arrowstyle="->"))
@@ -215,7 +216,7 @@ def main():
         % (slope, intercept)
 
     # Draw line variation plot
-    drawLines(xp, np.array(slopeList), np.array(interceptList))
+    drawLines(xp, l, np.array(slopeList), np.array(interceptList))
 
     # Check the result with batch unified LSQ method
     # Remove point C
