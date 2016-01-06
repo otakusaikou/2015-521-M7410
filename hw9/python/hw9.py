@@ -128,7 +128,7 @@ def drawLines(xp, l, slope, intercept, annotation=False):
         for i in range(len(slope)):
             ax.annotate(
                 "$1%s: y=%.6fx+%.6f$" % (chr(97+i), slope[i], intercept[i]),
-                xy=(xp[-4], xp[-4] * slope[i] + intercept[i]),
+                xy=(xp[-1], xp[-1] * slope[i] + intercept[i]),
                 xytext=(40, 20), textcoords="offset points", va="center",
                 size=15,
                 arrowprops=dict(arrowstyle="->"))
@@ -144,7 +144,7 @@ def main():
     l = np.array([10.01, 12.98, 16.05, 18.99, 16.02])
 
     # Define unknown parameter observables
-    lx = np.matrix([[3], [7]])
+    lx = np.matrix([[0], [0]])
 
     # Define symbol arrays for unknown parameters and observables
     Xs = np.array((symbols("m k")))
@@ -187,6 +187,8 @@ def main():
     M3, taw3 = addObs(
         xp[2:3], l[2:3], ls[2:3], W[2:3, 2:3], lx, X0, Xs, Wxx, M2, taw2)
     slope, intercept = tuple(np.array(M3.I * taw3).flatten())
+    slopeList.append(slope)
+    interceptList.append(intercept)
     print "Points A, B, C:\n  Slope m = %.6f, Y-intercept k = %.6f\n" \
         % (slope, intercept)
 
@@ -199,6 +201,9 @@ def main():
     print "Points A, B, C, D:\n  Slope m = %.6f, Y-intercept k = %.6f\n" \
         % (slope, intercept)
 
+    # Draw line variation plot
+    drawLines(xp, l, np.array(slopeList), np.array(interceptList))
+
     # Remove point C and add new point C'
     M5, taw5 = subObs(
         xp[2:3], l[2:3], ls[2:3], W[2:3, 2:3], lx, X0, Xs, Wxx, M4, taw4)
@@ -209,9 +214,6 @@ def main():
     interceptList.append(intercept)
     print "Points A, B, D, C':\n  Slope m = %.6f, Y-intercept k = %.6f\n" \
         % (slope, intercept)
-
-    # Draw line variation plot
-    drawLines(xp, l, np.array(slopeList), np.array(interceptList))
 
     # Check the result with batch unified LSQ method
     # Remove point C
