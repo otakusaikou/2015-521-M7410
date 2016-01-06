@@ -149,7 +149,7 @@ def main():
     l = np.array([10.01, 12.98, 16.05, 18.99, 16.02])
 
     # Define unknown parameter observables
-    lx = np.matrix([[0], [0]])
+    lx = np.matrix([[3], [7]])
 
     # Define symbol arrays for unknown parameters and observables
     Xs = np.array((symbols("m k")))
