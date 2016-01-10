@@ -60,7 +60,6 @@ def subObs(xp, l, ls, W, lx, X0, Xs, Wxx, M0, taw0):
 
     # Update normal matrix and constants matrix
     Q = W.I
-    Q = W.I
     M1 = (M0.I * (np.identity(len(Xs)) + B.T * (Q-B*M0.I*B.T).I * B * M0.I)).I
     taw1 = taw0 - B.T * W * f
 
