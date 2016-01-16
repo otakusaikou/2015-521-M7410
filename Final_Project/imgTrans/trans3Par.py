@@ -14,7 +14,8 @@ def get3Par(RGB1, RGB2):
     Bg = np.array(map(lambda g: [0, 1, 0], g2))
     Bb = np.array(map(lambda b: [0, 0, 1], b2))
     B = np.matrix(np.concatenate((Br, Bg, Bb))).astype(np.double)
-    f = np.matrix(np.concatenate((r1, g1, b1))).astype(np.double)
+    f = np.matrix(
+        np.concatenate((r1 - r2, g1 - g2, b1 - b2))).astype(np.double)
 
     N = B.T * B
     t = B.T * f
