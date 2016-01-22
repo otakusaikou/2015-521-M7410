@@ -130,7 +130,7 @@ while abs(sum(X)) > 10^-15
 end
 
 % Compute error of unit weight
-s0 = sqrt(res_new / (size(B, 1) * 2 - size(B, 2)));
+s0 = sqrt(res_new / (size(B, 1) - size(B, 2)));
 fprintf('Error of unit weight : %.4f\n', s0);
 
 % Compute other informations

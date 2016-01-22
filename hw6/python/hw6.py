@@ -194,7 +194,7 @@ def nonlinearApproach(p, q, P, Q, W, s):
         lc += 1
 
     # Compute error of unit weight
-    s0 = (res_new / (B.shape[0] * 2 - B.shape[1]))**0.5
+    s0 = (res_new / (B.shape[0] - B.shape[1]))**0.5
     print "Error of unit weight : %.4f\n" % s0
 
     # Compute other informations
